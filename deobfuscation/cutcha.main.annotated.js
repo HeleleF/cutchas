@@ -163,7 +163,7 @@
                 };
                 if (!_0x481720()) {
                     if (!_0x403e92()) {
-                        _0x57ade5('ind\x65xOf');
+                        _0x57ade5('ind\x65xOf'); // both \x65 and \u0435 LOOK like an 'e'
                     } else {
                         _0x57ade5('ind\u0435xOf');
                     }
