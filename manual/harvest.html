@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutcaptcha Harvester</title>
+    <link rel="stylesheet" href="static/css/harvest.css">
+    <link rel="stylesheet" href="static/css/jquery-ui.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="header"></h1>
+        <div class="controls">  
+            <button id='skipBtn' class="ui-button ui-corner-all">Get new puzzle</button>
+            <button id='brokenBtn' class="ui-button ui-corner-all">Report puzzle</button>
+            <button id="submitBtn" class="ui-button ui-corner-all right">Submit</button>
+        </div>
+        <img class="puzzle cut" id='cut'>
+        <div class="partarea">
+            <img class="puzzle part" id='part0' title="Part 0">
+            <img class="puzzle part" id='part1' title="Part 1">
+            <img class="puzzle part" id='part2' title="Part 2">
+        </div>
+    </div>
+    <pre class="stats" title="Updated every minute"></pre>
+    <script defer src="static/js/jquery.js"></script>
+    <script defer src="static/js/jquery-ui.js"></script>
+    <script defer src="static/js/harvest.js"></script>
+</body>
+
+</html>
