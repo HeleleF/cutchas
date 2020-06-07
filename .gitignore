@@ -1,3 +1,8 @@
+#own stuff
+train/
+failed/
+server/cutcha.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
