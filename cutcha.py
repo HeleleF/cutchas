@@ -5,25 +5,56 @@ import logging
 import os
 import pathlib
 import time
-
+from numpy import unique
+import sqlite3
 from itertools import groupby
 from sys import version_info
 
 from aiohttp import ClientConnectionError, ClientError, ClientSession, TCPConnector, ContentTypeError
+#from aiohttp_proxy import ProxyConnector, ProxyType
 
 assert version_info >= (3, 7), 'Install Python 3.7 or higher'
 
 log = logging.getLogger('cutcha')
 log.setLevel(logging.DEBUG)
 
-#fh = logging.FileHandler('./cutcha.log', 'w', 'utf-8')
+fh = logging.FileHandler('./cutcha.log', 'w', 'utf-8')
 ch = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')
-#fh.setFormatter(formatter)
+fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 
-#log.addHandler(fh)
+log.addHandler(fh)
 log.addHandler(ch)
+
+def insert_db(q_list: list, puzzle_type: str, db_path: str = './server/cutcha.db'):
+
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+
+    try:
+
+        cur.executemany("INSERT INTO puzzle (question,typ) values (?,?)", [(q, puzzle_type) for q in q_list])
+        conn.commit()
+    except sqlite3.IntegrityError as sie:
+        log.error(f'Inserting for type {puzzle_type} failed with {sie}')
+
+    cur.close()
+    conn.close()
+
+
+def read_db(puzzle_type: str, db_path: str = './server/cutcha.db'):
+
+    conn = sqlite3.connect(db_path)
+    cur = conn.cursor()
+
+    cur.execute("SELECT question FROM puzzle WHERE typ=?", (puzzle_type, ))
+    qids = [qid[0] for qid in cur.fetchall()]
+
+    cur.close()
+    conn.close()
+
+    return qids
 
 
 def load_questions(num_tasks: int = 100, num_reqs: int = 100):
@@ -43,8 +74,9 @@ def load_questions(num_tasks: int = 100, num_reqs: int = 100):
     existing_qids = os.listdir('./train')
     loaded_qids = []
 
-    with open('failed.txt', 'r') as ff:
-        failed_qids = [f.strip() for f in ff.readlines()]
+    failed_qids = read_db('broken')
+
+    log.info(f'Starting {num_tasks} tasks with {num_reqs} requests each => Performing {num_tasks * num_reqs} requests in total!')
 
     async def produce(sess: ClientSession, queue: asyncio.Queue, cnt: int):
 
@@ -99,8 +131,14 @@ def load_questions(num_tasks: int = 100, num_reqs: int = 100):
 
         consumer = asyncio.create_task(consume(queue))
     
-        conn = TCPConnector(ssl=False)
-        async with ClientSession(connector=conn, headers=headers) as sess:
+        #conn = TCPConnector(ssl=False)
+
+        # conn = ProxyConnector(
+        #     proxy_type=ProxyType.HTTPS,
+        #     host='51.158.99.51',
+        #     port=8761,
+        # )
+        async with ClientSession(headers=headers) as sess:
             producers = [asyncio.create_task(produce(sess, queue, num_reqs)) for _ in range(num_tasks)]
         
             log.info('Waiting for producers...')
@@ -116,72 +154,83 @@ def load_questions(num_tasks: int = 100, num_reqs: int = 100):
     asyncio.run(produce_and_consume())
     elapsed = time.perf_counter() - start
 
-    if len(loaded_qids):
-        with open('questions.txt', 'a') as qf:
-            for line in loaded_qids:
-                qf.write(f'{line}\n')
-
     log.info(f'Recieved {len(loaded_qids)} new questions in {elapsed:.2f} seconds')
     log.info(f'ALREADY EXISTED: {results["existing"]}')
     log.info(f'DUPLICATES DURING THIS RUN: {results["duplicate"]}')
     log.info(f'KNOWN TO BE BROKEN: {results["broken"]}')
 
+    return load_images(loaded_qids)
 
-def load_images(path_to_questions: str = 'questions.txt'):
+
+def load_images(questions: list):
+
+    if not len(questions):
+        log.info('nothing to do')
+        return
 
     failed = []
+    success = []
 
     async def fetch_imgs(session: ClientSession, qid: str):
 
-        ret_val = True
+        cut = part0 = part1 = part2 = None
 
         try:
             async with session.get(f'https://cutcaptcha.com/captcha/SAs61IAI/{qid}/cut.png') as response:
 
                 content = await response.read()
-                if len(content) < 50:
-                    ret_val = False
-                else:
-                    with open(f'./train/{qid}_cut.png', 'wb') as fd:
-                        fd.write(content)
+                if len(content) > 50:
+                    cut = content
+
                     
             async with session.get(f'https://cutcaptcha.com/captcha/SAs61IAI/{qid}/part0.png') as response:
 
                 content = await response.read()
-                if len(content) < 50:
-                    failed.append(qid)
-                    ret_val = False
-                else:
-                    with open(f'./train/{qid}_part0.png', 'wb') as fd:
-                        fd.write(content)
+                if len(content) > 50:
+                    part0 = content
+
 
             async with session.get(f'https://cutcaptcha.com/captcha/SAs61IAI/{qid}/part1.png') as response:
 
                 content = await response.read()
-                if len(content) < 50:
-                    failed.append(qid)
-                    ret_val = False
-                else:
-                    with open(f'./train/{qid}_part1.png', 'wb') as fd:
-                        fd.write(content)
+                if len(content) > 50:
+                    part1 = content
+
 
             async with session.get(f'https://cutcaptcha.com/captcha/SAs61IAI/{qid}/part2.png') as response:
 
                 content = await response.read()
-                if len(content) < 50:
-                    failed.append(qid)
-                    ret_val = False
-                else:
-                    with open(f'./train/{qid}_part2.png', 'wb') as fd:
-                        fd.write(content)
+                if len(content) > 50:
+                    part2 = content
 
         except ClientError as e:
             log.error(f'{qid} got error: {e}')
-            ret_val = False
 
-        return ret_val
+        if cut and part0 and part1 and part2:
+
+            os.makedirs(f'./train/{qid}')
+
+            with open(f'./train/{qid}/cut.png', 'wb') as fd:
+                fd.write(cut)
+            with open(f'./train/{qid}/part0.png', 'wb') as fd:
+                fd.write(part0)
+            with open(f'./train/{qid}/part1.png', 'wb') as fd:
+                fd.write(part1)
+            with open(f'./train/{qid}/part2.png', 'wb') as fd:
+                fd.write(part2)
+
+            success.append(qid)
+
+        else:
+            failed.append(qid)
 
     async def fetch_all(qids):
+
+        # conn = ProxyConnector(
+        #     proxy_type=ProxyType.HTTPS,
+        #     host='51.158.99.51',
+        #     port=8761,
+        # )
         async with ClientSession() as sess:
 
             tasks = [asyncio.create_task(fetch_imgs(sess, qid.strip())) for qid in qids]
@@ -189,94 +238,16 @@ def load_images(path_to_questions: str = 'questions.txt'):
             log.info(f'Fetching {len(qids)} puzzles...')
             result = await asyncio.gather(*tasks)
 
-            log.info(f'Fetched {result.count(True)} puzzles successfully!')
-
-    with open(path_to_questions, 'r') as infile:
-        questions = infile.readlines()
+            log.info(f'Fetched {len(success)} puzzles successfully!')
+            log.info(f'Failed to fetch {len(failed)} puzzles!')
 
     start = time.perf_counter()
     asyncio.run(fetch_all(questions))
     elapsed = time.perf_counter() - start
 
-    with open('failed.txt', 'a') as outfile:
-        for line in failed:
-            outfile.write(f'{line}\n')
+    insert_db(success, 'unknown')
+    insert_db(failed, 'broken')
 
     log.info(f'Done after {elapsed:.2f} seconds')
 
-
-def structure_train_data(img_dir: str = './train', dest_dir: str = './train', ignore_missing = False):
-
-    data = [p for p in pathlib.Path(img_dir).iterdir() if p.is_file()]
-    cnt = len(data)
-
-    if not cnt:
-        log.info(f'Nothing to do!')
-        return
-
-    if cnt % 4 != 0:
-        log.warning(f'Found {cnt} images, which is not a multiple of 4! Check yo self before u wreck yo self!')
-    else:
-        log.info(f'Found {cnt} images, expecting {cnt // 4} new ids')
-
-    def keyfunc(x: pathlib.Path):
-        return x.stem.split('_')[0]
-
-    data = sorted(data, key=keyfunc)
-
-    results = dict(created=0, duplicate=0, missing=0)
-
-    for k, g in groupby(data, keyfunc):
-    
-        imgs = list(g)
-
-        if len(imgs) != 4:
-            results['missing'] += 1
-
-            if not ignore_missing:
-                log.error(f'Missing some {k}, skipping...')
-                continue
-
-        try:
-            os.makedirs(f'{dest_dir}/{k}')
-        except OSError:
-            #log.warning(f'Found duplicate {k}, skipping...')
-            results['duplicate'] += 1
-            continue
-
-        for f in imgs:
-
-            newf = pathlib.Path(f'{dest_dir}/{k}/{f.stem.split("_")[1]}{f.suffix}')
-            f.replace(newf)
-        results['created'] += 1
-
-    log.info(f'CREATED: {results["created"]}')
-    log.info(f'DUPLICATES: {results["duplicate"]}')
-    log.info(f'MISSING: {results["missing"]}')
-
-    [p.unlink() for p in pathlib.Path(img_dir).iterdir() if p.is_file()]
-
-
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser(description='Load and store cutcaptcha puzzles')
-
-    parser.add_argument('-q', '--load_questions', dest='q', action='store_true', help='If passed, new question ids will be loaded')
-    parser.add_argument('-n', dest='n', type=int, default=100, metavar='N', help='How many tasks to start. (Defaults to 100) Only works when -q is passed')
-    parser.add_argument('-r', dest='r', type=int, default=100, metavar='R', help='How many requests to do per task. (Defaults to 100) Only works when -q is passed')
-
-    parser.add_argument('-i', '--load_images', dest='i', action='store_true', help='If passed, images will be loaded for all questions in questions.txt')
-    parser.add_argument('-f', dest='f', type=str, default='questions.txt', metavar='Q_FILE', help='The path to the file containing the question ids. (Defaults to questions.txt) Only works when -i is passed')
-    
-    parser.add_argument('-s', '--structure_data', dest='s', action='store_true', help='If passed, all files in ./train will be structured into dirs')
-    parser.add_argument('-d', dest='d', type=str, default='./train', metavar='IMG_DIR', help='The path to the dir containing all puzzles. (Defaults to ./train) Only works when -s is passed')
-    parser.add_argument('-o', dest='o', type=str, default='./train', metavar='DEST_DIR', help='The path to the destination dir. (Defaults to ./train) Only works when -s is passed')
-    parser.add_argument('-m', dest='m', action='store_true', help='If passed, missing images for a question will be ignored and the dir is created anyway. Only works when -s is passed')
-    args = parser.parse_args()
-
-    if args.q:
-        load_questions(args.n, args.r)
-    if args.i:
-        load_images(args.f)
-    if args.s:
-        structure_train_data(args.d, args.o, args.m)
+load_questions(50, 50)
