@@ -35,7 +35,7 @@ const getJSON = async (info, init) => {
 
     } catch (e) {
         console.log(e);
-        return { OK: false, message: e.message };
+        return { OK: false, result: e.message };
     }
 };
 
@@ -45,9 +45,9 @@ const fetchPuzzle = async () => {
 
     const { OK, result } = await getJSON(`${SUBMITURL}/puzzle`);
 
-    ({ question: guid, token: token } = result);
-
     if (OK) {
+        ({ question: guid, token: token } = result);
+
         $header.text(`ID: ${guid}`);
 
         $cut.attr('src', `${APIURL}/${guid}/cut.png`);
@@ -55,13 +55,14 @@ const fetchPuzzle = async () => {
         $p1.css({ height: ``, width: ``, left: 'auto', top: 'auto' }).attr('src', `${APIURL}/${guid}/part1.png`);
         $p2.css({ height: ``, width: ``, left: 'auto', top: 'auto' }).attr('src', `${APIURL}/${guid}/part2.png`);
 
-    } else {
-        $header.text(`Error: ${msg}`);
-    }
+        $submit.button("option", "disabled", false);
+        $skip.button("option", "disabled", false);
+        $broken.button("option", "disabled", false);
 
-    $submit.button("option", "disabled", false);
-    $skip.button("option", "disabled", false);
-    $broken.button("option", "disabled", false);
+    } else {
+        $header.text(`Error: ${result}`);
+        $skip.button("option", "disabled", false);
+    }
 };
 
 const reportPuzzle = async () => {
@@ -116,7 +117,7 @@ const getStats = async () => {
     if (stats.OK) {
         $stats.text(JSON.stringify(stats.result));
     } else {
-        $header.text(stats.message);
+        $header.text(stats.result);
     }
 };
 
