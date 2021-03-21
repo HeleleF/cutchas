@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-import os
-import sqlite3
-
 import flask
-import requests
 from flask_cors import CORS
 
 import settings
