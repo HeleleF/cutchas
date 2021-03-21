@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-import argparse
 import asyncio
 import logging
 import os
-import pathlib
-import time
-from numpy import unique
 import sqlite3
-from itertools import groupby
-from sys import version_info
+import time
+from sys import version_info, platform
 
-from aiohttp import ClientConnectionError, ClientError, ClientSession, TCPConnector, ContentTypeError
-#from aiohttp_proxy import ProxyConnector, ProxyType
+from aiohttp import (ClientConnectionError, ClientError, ClientSession,
+                     ContentTypeError)
 
 assert version_info >= (3, 7), 'Install Python 3.7 or higher'
+
+# asyncio bug in python 3.8+ on windows (see https://bugs.python.org/issue39232)
+# workaround from https://github.com/encode/httpx/issues/914#issuecomment-622586610
+if version_info >= (3, 8) and platform.startswith('win'):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 log = logging.getLogger('cutcha')
 log.setLevel(logging.DEBUG)
