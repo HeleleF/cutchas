@@ -46,21 +46,21 @@ def get_puzzle():
         ret = request_puzzle()
 
         if not ret:
-            return dict(OK=False, message='Cutcaptcha Server Error')
+            return dict(OK=False, result='Cutcaptcha Server Error')
 
         try:
             result = Puzzle.query.filter(Puzzle.question == ret['question']).all()
         except exc.SQLAlchemyError as sae:
             print(f'SQL Error: {sae}')
-            return dict(OK=False, message='SQL Error')
+            return dict(OK=False, result='SQL Error')
 
         if not len(result):
             print(f'No puzzle found for question ID = {ret["question"]}')
-            return dict(OK=False, message='Database Error')
+            return dict(OK=False, result='Database Error')
 
         if len(result) > 1:
             print(f'Found more than one puzzle for question ID = {ret["question"]}')
-            return dict(OK=False, message='Database Error')
+            return dict(OK=False, result='Database Error')
 
         if result[0].typ == 'unknown':
             return dict(OK=True, result=ret)
@@ -74,9 +74,9 @@ def submit_puzzle(data):
         x0,y0,x1,y1,x2,y2 = data['coords']
 
         if len(token) != 32:
-            return dict(OK=False, message='Wrong token')    
+            return dict(OK=False, result='Wrong token')    
         if len(question) != 36:
-            return dict(OK=False, message='Wrong question')
+            return dict(OK=False, result='Wrong question')
 
         payload['captcha_token'] = token
         payload['solution'] = [[x0, y0, 0], [x1, y1, 0], [x2, y2, 0]]
@@ -86,13 +86,13 @@ def submit_puzzle(data):
             resp = requests.post('https://cutcaptcha.com/captcha/SAs61IAI/check', headers=headers, json=payload, timeout=7)
         except requests.exceptions.ReadTimeout as timeout_err:
             print(f'Timeout: {timeout_err}')
-            return dict(OK=False, message='Server timed out')
+            return dict(OK=False, result='Server timed out')
 
         try:
             ret = resp.json()
         except ValueError:
             print('Most likely server is down')
-            return dict(OK=False, message='Server is down')
+            return dict(OK=False, result='Server is down')
 
         successful = ret.get('succ', False)
         solved = ret.get('correct', False)
@@ -107,12 +107,12 @@ def submit_puzzle(data):
                 db.session.commit()
             except exc.SQLAlchemyError as sae:
                 print(f'SQL Error: {sae}')
-                return dict(OK=False, message='SQL Error')
+                return dict(OK=False, result='SQL Error')
 
             return dict(OK=True, rows=rows_matched)
         else:
             print('Incorrect')
-            return dict(OK=True, message='Not correct')
+            return dict(OK=True, result='Not correct')
 
 def update_puzzle(data):
 
@@ -120,7 +120,7 @@ def update_puzzle(data):
     puzzle_type = data['type']
 
     if len(question) != 36:
-        return dict(OK=False, message='Wrong question')
+        return dict(OK=False, result='Wrong question')
 
     print(f'Marking {question} as {puzzle_type}!')
 
@@ -129,9 +129,9 @@ def update_puzzle(data):
         db.session.commit()
     except exc.SQLAlchemyError as sae:
         print(f'SQL Error: {sae}')
-        return dict(OK=False, message='SQL Error')
+        return dict(OK=False, result='SQL Error')
 
-    return dict(OK=True, message='Recieved', rows=rows_matched)
+    return dict(OK=True, result='Recieved', rows=rows_matched)
 
 def get_stats():
     try:
@@ -139,9 +139,9 @@ def get_stats():
         r = db.session.query(Puzzle.typ, func.count(Puzzle.typ)).group_by(Puzzle.typ).all()
     except exc.SQLAlchemyError as sae:
         print(f'SQL Error: {sae}')
-        return dict(OK=False, message='SQL Error')
+        return dict(OK=False, result='SQL Error')
 
     if r is not None:
         return dict(OK=True, result={ typ[0]: typ[1] for typ in r })
     else:
-        return dict(OK=False, message='SQL Error')  
+        return dict(OK=False, result='SQL Error')  
