@@ -1,0 +1,9 @@
+.Cutcha {
+    width: fit-content;
+    position: relative;
+    box-shadow: 5px 5px 20px 5px rgba(200, 200, 200, 40%);
+}
+
+.PuzzlePieceArea {
+    display: flex;
+}

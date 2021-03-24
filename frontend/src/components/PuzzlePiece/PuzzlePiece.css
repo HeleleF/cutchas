@@ -1,0 +1,5 @@
+.PuzzlePiece {
+    cursor: move;
+    border: 1px dotted black;
+    user-select: none;
+}
