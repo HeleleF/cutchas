@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 import { Puzzle } from '../models/Puzzle.js';
 import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
 import axiosInstance from '../util/axios.js';
+import { SECRETS } from '../util/secrets.js';
 
 const payload = {
     f: '',
@@ -23,7 +24,7 @@ export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
     // res.send(doc);
 
     const { data } = await axiosInstance.post<CutchaPuzzle>(
-        'https://cutcaptcha.com/captcha/SAs61IAI.json',
+        `${SECRETS.CUTCHA_API_URL}.json`,
         {
             api_key: 'SAs61IAI',
         },
@@ -50,10 +51,10 @@ export const submitPuzzle = async (
     const { id, token, x0, x1, x2, y0, y1, y2 } = req.body;
 
     const { data } = await axiosInstance.post<CutchaPuzzleSubmitResult>(
-        'https://cutcaptcha.com/captcha/SAs61IAI/check',
+        `${SECRETS.CUTCHA_API_URL}/check`,
         {
             ...payload,
-            captcha_token: token, // 'ME6uZaaE8Iv9lxEIFNaF4eiBiLiEaHEt'
+            captcha_token: token,
             solution: [
                 [x0, y0, 0],
                 [x1, y1, 0],
