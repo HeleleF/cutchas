@@ -17,6 +17,10 @@ export interface PuzzleTypeCount {
     typCount: number;
 }
 
+export interface ApiError {
+    error: string;
+}
+
 export type PuzzleSubmitData = PuzzleData & PuzzleSolution;
 
 export interface PuzzleDataLoading {
