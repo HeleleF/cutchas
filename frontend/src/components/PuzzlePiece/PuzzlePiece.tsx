@@ -20,6 +20,7 @@ function PuzzlePiece({ onDragEnd, id, scaleFactor, partNumber }: PuzzlePieceProp
             onDragEnd={onDragEnd.bind(null, partNumber)}
             canDrag={true}
             className="PuzzlePiece"
+            title={`Puzzle Piece ${partNumber + 1}`}
             src={`${CUTCHA_API_URL}/${id}/part${partNumber}.png`}
         />
     );
