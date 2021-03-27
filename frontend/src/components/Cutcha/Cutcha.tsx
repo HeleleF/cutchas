@@ -8,11 +8,13 @@ import PuzzlePiece from '../PuzzlePiece/PuzzlePiece';
 
 interface CutchaProps {
     onDragEnd: (num: number, dragData: DraggableData) => void;
-    cid: string;
+    cid: string | null;
     scaleFactor: number;
 }
 
-function Cutcha({ onDragEnd, cid, scaleFactor }: CutchaProps): JSX.Element {
+function Cutcha({ onDragEnd, cid, scaleFactor }: CutchaProps): JSX.Element | null {
+    if (!cid) return null;
+
     return (
         <div className="Cutcha">
             <PuzzleMain scaleFactor={scaleFactor} id={cid} />

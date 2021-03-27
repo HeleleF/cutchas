@@ -3,15 +3,20 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { DraggableData } from 'react-draggable';
 
+import CutchaHeader from './components/CutchaHeader/CutchaHeader';
 import Cutcha from './components/Cutcha/Cutcha';
+import CutchaStats from './components/CutchaStats/CutchaStats';
 
-import { getRandomPuzzle, submitPuzzle } from './api/puzzle';
+import { getRandomPuzzle, reportPuzzle, submitPuzzle } from './api/puzzle';
 import { getPuzzleStats } from './api/stats';
 
-import { PuzzleData, PuzzleSolution, PuzzleStats } from './types/puzzle';
+import { PuzzleDataRequest, PuzzleSolution, PuzzleTypeCount } from './types/puzzle';
 
 function App(): JSX.Element {
-    const [puzzleData, setPuzzleData] = useState({ id: null, token: null } as PuzzleData);
+    const [puzzleData, setPuzzleData] = useState({
+        puzzle: null,
+        loading: true,
+    } as PuzzleDataRequest);
     const [solution, setSolution] = useState({
         x0: 0,
         y0: 0,
@@ -20,13 +25,17 @@ function App(): JSX.Element {
         x2: 0,
         y2: 0,
     } as PuzzleSolution);
-    const [stats, setStats] = useState({} as PuzzleStats);
+    const [stats, setStats] = useState([] as PuzzleTypeCount[]);
     const [scaleFactor] = useState(2.5);
-    const [solvedCount, setSolveCount] = useState(0);
 
     const getStats = async () => {
         const newStats = await getPuzzleStats();
         setStats(newStats);
+    };
+
+    const getPuzzle = async () => {
+        const pd = await getRandomPuzzle();
+        setPuzzleData({ puzzle: pd, loading: false });
     };
 
     useEffect(() => {
@@ -39,8 +48,8 @@ function App(): JSX.Element {
 
     useEffect(() => {
         console.log('get puzzle effect');
-        getRandomPuzzle().then((data) => setPuzzleData(data));
-    }, [solvedCount]);
+        getPuzzle();
+    }, []);
 
     const updateSolution = (num: number, { node, x, y }: DraggableData) => {
         setSolution((sol) => {
@@ -52,27 +61,40 @@ function App(): JSX.Element {
         });
     };
 
-    const onClick = () => {
+    const onSubmit = () => {
+        const pd = puzzleData.puzzle;
+        if (!pd) return;
+
+        setPuzzleData({ puzzle: null, loading: true });
         submitPuzzle({
-            ...puzzleData,
+            ...pd,
             ...solution,
-        }).then((correct) => {
-            console.log(correct);
-            if (correct) setSolveCount((solved) => solved + 1);
-        });
+        }).then(getPuzzle);
+    };
+
+    const onReport = () => {
+        const pid = puzzleData.puzzle?.id;
+        if (!pid) return;
+
+        setPuzzleData({ puzzle: null, loading: true });
+        reportPuzzle(pid).then(getPuzzle);
     };
 
     console.log('render');
 
     return (
         <div className="App">
-            <button onClick={onClick}>Submit</button>
-            <strong>Solved so far: {solvedCount}</strong>
-            {puzzleData.id ? (
-                <Cutcha onDragEnd={updateSolution} scaleFactor={scaleFactor} cid={puzzleData.id} />
+            <CutchaHeader cid={puzzleData?.puzzle?.id} onSubmit={onSubmit} onReport={onReport} />
+            {puzzleData.loading ? (
+                <p className="loader">Loading...</p>
             ) : (
-                <p>Loading...</p>
+                <Cutcha
+                    onDragEnd={updateSolution}
+                    scaleFactor={scaleFactor}
+                    cid={puzzleData.puzzle.id}
+                />
             )}
+            <CutchaStats stats={stats} />
         </div>
     );
 }
