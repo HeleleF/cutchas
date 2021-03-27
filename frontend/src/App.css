@@ -5,4 +5,12 @@
     justify-content: center;
     color: white;
     height: 100vh;
+    width: fit-content;
+    margin: 0 auto;
+    font-family: sans-serif;
+}
+
+.loader {
+    font-size: 10em;
+    color: deeppink;
 }
