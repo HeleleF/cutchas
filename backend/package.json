@@ -8,8 +8,7 @@
     "scripts": {
         "start": "tsc && node -r dotenv/config dist/server.js",
         "watch:only": "concurrently \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\"",
-        "watch:both": "concurrently \"cd ../frontend && npm start\" \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\"",
-        "test": "jest"
+        "watch:both": "concurrently \"cd ../frontend && npm start\" \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\""
     },
     "keywords": [],
     "author": "HeleleF",
@@ -22,7 +21,6 @@
         "express-rate-limit": "^5.2.6",
         "express-validator": "^6.10.0",
         "helmet": "^4.4.1",
-        "jest": "^26.6.3",
         "mongoose": "^5.12.1"
     },
     "devDependencies": {
