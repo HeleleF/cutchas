@@ -14,15 +14,6 @@ const payload = {
 };
 
 export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
-    // const doc = await Puzzle.findOne({ question: "123" });
-
-    // if (!doc) {
-    //   res.json({ msg: "not found" });
-    //   return;
-    // }
-
-    // res.send(doc);
-
     const { data } = await axiosInstance.post<CutchaPuzzle>(
         `${SECRETS.CUTCHA_API_URL}.json`,
         {
@@ -34,6 +25,8 @@ export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
         res.status(500).json(data);
         return;
     }
+
+    // TODO(helene): check if puzzle is already solved
 
     res.json({ id: data.captcha_question, token: data.captcha_token });
 };
