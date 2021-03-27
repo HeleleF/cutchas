@@ -1,5 +1,5 @@
 {
-    "name": "backend",
+    "name": "cutcha-backend",
     "version": "1.0.0",
     "private": true,
     "type": "module",
@@ -7,15 +7,14 @@
     "main": "dist/server.js",
     "scripts": {
         "start": "tsc && node -r dotenv/config dist/server.js",
+        "start:prod": "node dist/server.js",
+        "build": "tsc",
         "watch:only": "concurrently \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\"",
         "watch:both": "concurrently \"cd ../frontend && npm start\" \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\""
     },
     "keywords": [],
     "author": "HeleleF",
     "license": "MIT",
-    "engines": {
-        "node": "14.15.5"
-    },
     "dependencies": {
         "axios": "^0.21.1",
         "compression": "^1.7.4",

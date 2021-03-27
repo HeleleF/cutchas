@@ -1,0 +1,22 @@
+{
+  "name": "cutcha-main",
+  "version": "1.0.0",
+  "main": "backend/dist/server.js",
+  "private": true,
+  "repository": {},
+  "author": "HeleleF",
+  "license": "MIT",
+  "homepage": "",
+  "engines": {
+    "node": "14.15.5"
+  },
+  "dependencies": {
+    "concurrently": "^6.0.0"
+  },
+  "scripts": {
+    "build": "concurrently \"cd frontend && npm run build\" \"cd backend && npm run build\"",
+    "heroku-postbuild": "npm run build",
+    "install": "(cd frontend && npm install) && (cd backend && npm install)",
+    "start:prod": "cd backend && npm run start:prod"
+  }
+}
