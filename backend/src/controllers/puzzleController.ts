@@ -82,8 +82,8 @@ export const submitPuzzle = async (
             x2,
             y2,
         },
-        { new: true, upsert: true, rawResult: true },
-    ).lean();
+        { new: true, upsert: true, rawResult: true, lean: true },
+    );
 
     res.status(200).json({
         solved: data.correct,
