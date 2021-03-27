@@ -8,12 +8,25 @@ export interface PuzzleSolution {
 }
 
 export interface PuzzleData {
-    id: string | null;
-    token: string | null;
+    id: string;
+    token: string;
 }
 
-export interface PuzzleStats {
-    result?: unknown[];
+export interface PuzzleTypeCount {
+    _id: string;
+    typCount: number;
 }
 
 export type PuzzleSubmitData = PuzzleData & PuzzleSolution;
+
+export interface PuzzleDataLoading {
+    puzzle: null;
+    loading: true;
+}
+
+export interface PuzzleDataDone {
+    puzzle: PuzzleData;
+    loading: false;
+}
+
+export type PuzzleDataRequest = PuzzleDataLoading | PuzzleDataDone;

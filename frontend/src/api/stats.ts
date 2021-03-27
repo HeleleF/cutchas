@@ -1,8 +1,7 @@
-import { PuzzleStats } from '../types/puzzle';
+import { PuzzleTypeCount } from '../types/puzzle';
 
-export const getPuzzleStats = async (): Promise<PuzzleStats> => {
+export const getPuzzleStats = async (): Promise<PuzzleTypeCount[]> => {
     const resp = await fetch('/api/stats');
     const data = await resp.json();
-    console.log(data);
-    return data;
+    return data.result;
 };
