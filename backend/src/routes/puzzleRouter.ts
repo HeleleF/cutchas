@@ -30,6 +30,9 @@ puzzleRouter
                 .withMessage('Not a UUID'),
         ],
         puzzleController.submitPuzzle,
-    );
+    )
+    .get('/*', (_, res) => {
+        res.status(404).json({ error: 'not a valid puzzle route' });
+    });
 
 export default puzzleRouter;

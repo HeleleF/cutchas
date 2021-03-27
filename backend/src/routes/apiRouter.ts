@@ -23,7 +23,7 @@ apiRouter
         statsRouter,
     )
     .get('/*', (_, res) => {
-        res.status(404).json({ error: 'no a valid route' });
+        res.status(404).json({ error: 'not a valid route' });
     });
 
 export default apiRouter;
