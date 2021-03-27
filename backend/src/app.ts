@@ -33,9 +33,7 @@ app.set('port', process.env.PORT || 3001)
     .use(
         cors({
             origin:
-                process.env.NODE_ENV === 'production'
-                    ? SECRETS.HEROKU_URL
-                    : '*',
+                process.env.NODE_ENV === 'production' ? SECRETS.SELF_URL : '*',
         }),
     )
     .use(express.json())
