@@ -53,7 +53,7 @@ function App(): JSX.Element {
 
     useEffect(() => {
         getStats();
-        const intervalId = setInterval(getStats, 120000);
+        const intervalId = setInterval(getStats, 60000);
 
         return () => clearInterval(intervalId);
     }, []);
