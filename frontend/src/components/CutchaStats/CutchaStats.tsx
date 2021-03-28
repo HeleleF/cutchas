@@ -9,7 +9,7 @@ interface CutchaStatsProps {
 
 function CutchaStats({ stats }: CutchaStatsProps): JSX.Element {
     return (
-        <div className="CutchaStats">
+        <div className="CutchaStats" title="Updated every minute">
             {stats.map(({ _id, typCount }) => (
                 <p key={_id}>
                     {typCount} {_id}
