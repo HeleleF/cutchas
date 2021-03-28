@@ -9,16 +9,16 @@ apiRouter
     .use(
         '/puzzle',
         rateLimit({
-            windowMs: 1 * 60 * 1000, // 1 minute
-            max: 10, // 5 requests,
+            windowMs: 1 * 60 * 1000,
+            max: 20,
         }),
         puzzleRouter,
     )
     .use(
         '/stats',
         rateLimit({
-            windowMs: 1 * 60 * 1000, // 1 minute
-            max: 5, // 5 requests,
+            windowMs: 1 * 60 * 1000,
+            max: 5,
         }),
         statsRouter,
     )
