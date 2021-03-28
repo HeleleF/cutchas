@@ -6,11 +6,9 @@
     "description": "This is the cutcha backend",
     "main": "dist/server.js",
     "scripts": {
-        "start": "tsc && node -r dotenv/config dist/server.js",
         "start:prod": "node dist/server.js",
-        "build": "tsc",
-        "watch:only": "concurrently \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\"",
-        "watch:both": "concurrently \"cd ../frontend && npm start\" \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\""
+        "start:dev": "concurrently \"tsc -w\" \"nodemon -r dotenv/config dist/server.js\"",
+        "build": "tsc"
     },
     "keywords": [],
     "author": "HeleleF",
