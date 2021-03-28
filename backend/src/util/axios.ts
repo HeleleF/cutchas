@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SECRETS } from './secrets';
+import { SECRETS } from './secrets.js';
 
 const axiosInstance = axios.create({
     headers: {
