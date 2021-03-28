@@ -12,13 +12,20 @@ export interface PuzzleData {
     token: string;
 }
 
+export interface PuzzleDataApiResponseSuccess {
+    error: false;
+    data: PuzzleData;
+}
+export interface PuzzleDataApiResponseError {
+    error: true;
+    data: string;
+}
+
+export type PuzzleDataApiResponse = PuzzleDataApiResponseSuccess | PuzzleDataApiResponseError;
+
 export interface PuzzleTypeCount {
     _id: string;
     typCount: number;
-}
-
-export interface ApiError {
-    error: string;
 }
 
 export type PuzzleSubmitData = PuzzleData & PuzzleSolution;

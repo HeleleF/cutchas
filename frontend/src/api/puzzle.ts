@@ -1,15 +1,20 @@
-import { ApiError, PuzzleData, PuzzleSubmitData } from '../types/puzzle';
+import { PuzzleDataApiResponse, PuzzleSubmitData } from '../types/puzzle';
 
-export const getRandomPuzzle = async (): Promise<PuzzleData | ApiError> => {
+export const getRandomPuzzle = async (): Promise<PuzzleDataApiResponse> => {
     try {
         const resp = await fetch('/api/puzzle/new');
-        return await resp.json();
+        const pd = await resp.json();
+
+        return {
+            error: false,
+            data: pd,
+        };
     } catch (err) {
-        return { error: err.message };
+        return { error: true, data: err.message };
     }
 };
 
-export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown | ApiError> => {
+export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown> => {
     try {
         const resp = await fetch('/api/puzzle/submit', {
             method: 'POST',
@@ -24,7 +29,7 @@ export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown 
     }
 };
 
-export const reportPuzzle = async (puzzleId: string): Promise<unknown | ApiError> => {
+export const reportPuzzle = async (puzzleId: string): Promise<unknown> => {
     try {
         const resp = await fetch('/api/puzzle/report', {
             method: 'POST',

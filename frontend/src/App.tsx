@@ -10,13 +10,7 @@ import CutchaStats from './components/CutchaStats/CutchaStats';
 import { getRandomPuzzle, reportPuzzle, submitPuzzle } from './api/puzzle';
 import { getPuzzleStats } from './api/stats';
 
-import {
-    ApiError,
-    PuzzleData,
-    PuzzleDataRequest,
-    PuzzleSolution,
-    PuzzleTypeCount,
-} from './types/puzzle';
+import { PuzzleDataRequest, PuzzleSolution, PuzzleTypeCount } from './types/puzzle';
 
 function App(): JSX.Element {
     const [puzzleData, setPuzzleData] = useState({
@@ -41,15 +35,17 @@ function App(): JSX.Element {
     };
 
     const getPuzzle = async () => {
-        const pd = await getRandomPuzzle();
-        if ((pd as ApiError).error) {
-            setError((pd as ApiError).error);
+        const result = await getRandomPuzzle();
+        if (result.error) {
+            setError(result.data);
         } else {
-            setPuzzleData({ puzzle: pd as PuzzleData, loading: false });
+            setPuzzleData({ puzzle: result.data, loading: false });
         }
     };
 
-    useEffect(() => void getPuzzle(), []);
+    useEffect(() => {
+        getPuzzle();
+    }, []);
 
     useEffect(() => {
         getStats();
