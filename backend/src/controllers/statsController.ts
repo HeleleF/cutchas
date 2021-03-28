@@ -12,7 +12,9 @@ export const getStats = async (_: Request, res: Response): Promise<void> => {
             },
         ]);
 
-        res.status(200).json({ result });
+        res.status(200).json({
+            result: result.sort((x, y) => x._id.localeCompare(y._id)),
+        });
     } catch (err) {
         console.log('Failed with ', err);
         res.status(500).json({ error: err });
