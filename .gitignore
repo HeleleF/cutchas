@@ -1,9 +1,3 @@
-#own stuff
-train/
-failed/
-server/cutcha.db
-!frontend/.env
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -155,3 +149,9 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#own stuff
+train/
+failed/
+server/cutcha.db
+!frontend/.env
