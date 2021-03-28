@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { Puzzle } from '../models/Puzzle.js';
-import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
+
 import axiosInstance from '../util/axios.js';
 import { SECRETS } from '../util/secrets.js';
+
+import { Puzzle } from '../models/Puzzle.js';
+
+import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
 
 const payload = {
     f: '',
