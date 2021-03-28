@@ -27,6 +27,10 @@ app.set('port', process.env.PORT || 3001)
         helmet({
             contentSecurityPolicy: {
                 reportOnly: process.env.NODE_ENV !== 'production',
+                directives: {
+                    ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+                    'img-src': ["'self'", 'cutcaptcha.com'],
+                },
             },
         }),
     )
