@@ -36,9 +36,19 @@ Learning things about Javascript and Python by deobfuscating captcha sites and f
 
 ### Project Structure
 
+- `master` branch
+
+  - protected, pushing to this branch will deploy on heroku
+
+- `dev` branch:
+
+  - actual development happens here
+  - create new branches based on this one
+
 - `basics` branch:
 
-  - not really used right now, contains the "old stuff"
+  - not really anymore, contains the "old stuff"
+  - protected, basically _read-only_
 
   - `deobfuscation/`: JS files containing the captcha logic
   - `manual/`: Website to solve puzzles locally
@@ -50,14 +60,6 @@ Learning things about Javascript and Python by deobfuscating captcha sites and f
     - `train/`: All complete puzzles
     - `failed/`: All puzzles with some missing parts
     - `server/sqlite.db`: the sqlite3 database
-
-- `dev` branch:
-
-  - actual development
-  - the only one you need
-
-- `deploy` branch
-  - protected, pushing to this branch will deploy on heroku
 
 ### Current stats
 
