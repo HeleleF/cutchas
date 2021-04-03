@@ -2,10 +2,11 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .CutchaId {
+    font-size: large;
     text-transform: uppercase;
 }
 
@@ -13,15 +14,28 @@
     padding: 0 0.75em;
     border: none;
     border-radius: 0.5em 0.5em 0 0;
-    background-color: #ffe7b9;
+    background-color: #ffe6b900;
     cursor: pointer;
+    position: absolute;
+    z-index: 999;
+    top: 10em;
+}
+
+.btn.submit {
     color: darkgreen;
+    right: 10em;
 }
 
 .btn.report {
     color: crimson;
+    left: 10em;
 }
 
 .btn:focus {
     outline: none;
+}
+
+.icon {
+    fill: currentColor;
+    stroke: currentColor;
 }
