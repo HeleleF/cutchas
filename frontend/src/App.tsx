@@ -93,6 +93,30 @@ function App(): JSX.Element {
                 />
             )}
             <CutchaStats stats={stats} />
+            <p>
+                <div>
+                    Icons made by{' '}
+                    <a href="https://www.freepik.com" className="attribution-link" title="Freepik">
+                        Freepik
+                    </a>{' '}
+                    and{' '}
+                    <a
+                        href="https://www.flaticon.com/authors/roundicons"
+                        className="attribution-link"
+                        title="Roundicons"
+                    >
+                        Roundicons
+                    </a>{' '}
+                    from{' '}
+                    <a
+                        href="https://www.flaticon.com/"
+                        className="attribution-link"
+                        title="Flaticon"
+                    >
+                        www.flaticon.com
+                    </a>
+                </div>
+            </p>
         </div>
     );
 }

@@ -18,17 +18,17 @@
     cursor: pointer;
     position: absolute;
     z-index: 999;
-    top: 10em;
+    top: 20em;
 }
 
 .btn.submit {
     color: darkgreen;
-    right: 10em;
+    right: 5em;
 }
 
 .btn.report {
     color: crimson;
-    left: 10em;
+    left: 5em;
 }
 
 .btn:focus {
