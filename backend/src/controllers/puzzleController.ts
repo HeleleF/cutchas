@@ -17,19 +17,24 @@ const payload = {
 };
 
 export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
-    const { data } = await axiosInstance.post<CutchaPuzzle>(
-        `${SECRETS.CUTCHA_API_URL}.json`,
-        {
-            api_key: 'SAs61IAI',
-        },
+    let data;
+
+    // repeat until we get a puzzle thats either UNSOLVED or NEW
+    do {
+        ({ data } = await axiosInstance.post<CutchaPuzzle>(
+            `${SECRETS.CUTCHA_API_URL}.json`,
+            {
+                api_key: 'SAs61IAI',
+            },
+        ));
+
+        if (!data.succ) {
+            res.status(500).json(data);
+            return;
+        }
+    } while (
+        await Puzzle.findOne({ question: data.captcha_question, typ: 'solved' })
     );
-
-    if (!data.succ) {
-        res.status(500).json(data);
-        return;
-    }
-
-    // TODO(helene): check if puzzle is already solved
 
     res.json({ id: data.captcha_question, token: data.captcha_token });
 };
