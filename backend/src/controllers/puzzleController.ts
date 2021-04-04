@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-
+import { Puzzle } from '../models/Puzzle.js';
+import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
 import axiosInstance from '../util/axios.js';
 import { SECRETS } from '../util/secrets.js';
-
-import { Puzzle } from '../models/Puzzle.js';
-
-import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
 
 const payload = {
     f: '',
@@ -22,9 +19,9 @@ export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
     // repeat until we get a puzzle thats either UNSOLVED or NEW
     do {
         ({ data } = await axiosInstance.post<CutchaPuzzle>(
-            `${SECRETS.CUTCHA_API_URL}.json`,
+            `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}.json`,
             {
-                api_key: 'SAs61IAI',
+                api_key: SECRETS.CUTCHA_API_KEY,
             },
         ));
 
@@ -52,7 +49,7 @@ export const submitPuzzle = async (
     const { id, token, x0, x1, x2, y0, y1, y2 } = req.body;
 
     const { data } = await axiosInstance.post<CutchaPuzzleSubmitResult>(
-        `${SECRETS.CUTCHA_API_URL}/check`,
+        `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/check`,
         {
             ...payload,
             captcha_token: token,
