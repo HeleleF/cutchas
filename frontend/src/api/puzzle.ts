@@ -25,7 +25,7 @@ export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown>
         });
         return await resp.json();
     } catch (err) {
-        return { error: err.message };
+        return { error: true, data: err.message };
     }
 };
 
@@ -40,6 +40,6 @@ export const reportPuzzle = async (puzzleId: string): Promise<unknown> => {
         });
         return await resp.json();
     } catch (err) {
-        return { error: err.message };
+        return { error: true, data: err.message };
     }
 };
