@@ -1,14 +1,11 @@
-import express from 'express';
-
-import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
-
-import { join, dirname } from 'path';
+import express from 'express';
+import helmet from 'helmet';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-
-import { SECRETS } from './util/secrets.js';
 import apiRouter from './routes/apiRouter.js';
+import { SECRETS } from './util/secrets.js';
 
 /**
  * When using Modules in Node (for cool stuff like ts target esnext and top level await)
