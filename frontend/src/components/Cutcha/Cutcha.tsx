@@ -1,9 +1,7 @@
-import './Cutcha.css';
-
 import { DraggableData } from 'react-draggable';
-
 import PuzzleMain from '../PuzzleMain/PuzzleMain';
 import PuzzlePiece from '../PuzzlePiece/PuzzlePiece';
+import './Cutcha.css';
 
 interface CutchaProps {
     onDragEnd: (num: number, dragData: DraggableData) => void;

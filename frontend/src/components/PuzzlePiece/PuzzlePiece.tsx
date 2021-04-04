@@ -1,10 +1,7 @@
-import './PuzzlePiece.css';
-
-import React from 'react';
 import { DraggableData } from 'react-draggable';
-
 import { CUTCHA_API_URL } from '../../constants/cutcha';
 import ScalableImage from '../ScalableImage/ScalableImage';
+import './PuzzlePiece.css';
 
 interface PuzzlePieceProps {
     onDragEnd: (num: number, dragData: DraggableData) => void;
@@ -18,7 +15,6 @@ function PuzzlePiece({ onDragEnd, id, scaleFactor, partNumber }: PuzzlePieceProp
         <ScalableImage
             scaleFactor={scaleFactor}
             onDragEnd={onDragEnd.bind(null, partNumber)}
-            canDrag={true}
             className="PuzzlePiece"
             title={`Puzzle Piece ${partNumber + 1}`}
             src={`${CUTCHA_API_URL}/${id}/part${partNumber}.png`}

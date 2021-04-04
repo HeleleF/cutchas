@@ -1,7 +1,6 @@
-import './PuzzleMain.css';
-
 import { CUTCHA_API_URL } from '../../constants/cutcha';
 import ScalableImage from '../ScalableImage/ScalableImage';
+import './PuzzleMain.css';
 
 interface PuzzleMainProps {
     scaleFactor: number;

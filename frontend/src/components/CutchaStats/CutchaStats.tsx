@@ -1,6 +1,5 @@
-import './CutchaStats.css';
-
 import { PuzzleTypeCount } from '../../types/puzzle';
+import './CutchaStats.css';
 
 interface CutchaStatsProps {
     stats: PuzzleTypeCount[];

@@ -1,9 +1,7 @@
-import React from 'react';
-
 import { render, screen, waitFor } from '@testing-library/react';
-import App from '../App';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import App from '../App';
 
 const server = setupServer(
     rest.get('/api/puzzle/new', (req, res, ctx) => {

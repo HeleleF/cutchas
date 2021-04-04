@@ -1,15 +1,11 @@
-import './App.css';
-
 import { useEffect, useState } from 'react';
 import { DraggableData } from 'react-draggable';
-
-import CutchaHeader from './components/CutchaHeader/CutchaHeader';
-import Cutcha from './components/Cutcha/Cutcha';
-import CutchaStats from './components/CutchaStats/CutchaStats';
-
 import { getRandomPuzzle, reportPuzzle, submitPuzzle } from './api/puzzle';
 import { getPuzzleStats } from './api/stats';
-
+import './App.css';
+import Cutcha from './components/Cutcha/Cutcha';
+import CutchaHeader from './components/CutchaHeader/CutchaHeader';
+import CutchaStats from './components/CutchaStats/CutchaStats';
 import { PuzzleDataRequest, PuzzleSolution, PuzzleTypeCount } from './types/puzzle';
 
 function App(): JSX.Element {
