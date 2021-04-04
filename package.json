@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "main": "backend/dist/server.js",
   "private": true,
-  "repository": {},
+  "repository": "github:HeleleF/cutchas",
   "author": "HeleleF",
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/HeleleF/cutchas",
   "engines": {
-    "node": "14.x",
-    "npm": "6.x"
+    "node": "14.x"
   },
   "dependencies": {
     "concurrently": "^6.0.0"
   },
   "scripts": {
     "heroku-postbuild": "concurrently \"cd frontend && npm run build\" \"cd backend && npm run build\"",
+    "heroku-cleanup": "cd frontend && rm -r node_modules && echo Frontend pruned.",
     "install": "concurrently \"cd frontend && npm install --production=false\" \"cd backend && npm install --production=false\"",
     "start:prod": "cd backend && npm run start:prod"
   }
