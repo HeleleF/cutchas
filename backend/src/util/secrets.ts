@@ -1,7 +1,13 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 export const SECRETS = {
-    MONGO_DB_URL: process.env.MONGO_DB_URL!,
-    SELF_URL: process.env.SELF_URL!,
-    API_TOKEN: process.env.API_TOKEN!,
-    CUTCHA_API_URL: process.env.CUTCHA_API_URL!,
+    MONGO_DB_URL:
+        process.env.MONGO_DB_URL ??
+        'No mongo db url set! Update heroku config vars!',
+    SELF_URL:
+        process.env.SELF_URL ?? 'No self url set! Update heroku config vars!',
+    CUTCHA_API_KEY:
+        process.env.CUTCHA_API_KEY ??
+        'No cutcha api key set! Update heroku config vars!',
+    CUTCHA_API_URL:
+        process.env.CUTCHA_API_URL ??
+        'No cutcha api url set! Update heroku config vars!',
 };
