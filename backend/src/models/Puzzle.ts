@@ -29,8 +29,8 @@ const puzzleSchema = new mongoose.Schema<PuzzleDocument>(
                         value,
                     );
                 },
-                message(props: any) {
-                    return `${props.value} is not a valid question uuid!`;
+                message({ value }: { value: unknown }) {
+                    return `${value} is not a valid question uuid!`;
                 },
             },
         },
