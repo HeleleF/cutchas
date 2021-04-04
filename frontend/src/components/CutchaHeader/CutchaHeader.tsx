@@ -1,7 +1,5 @@
 import './CutchaHeader.css';
 
-import React from 'react';
-
 interface CutchaHeaderProps {
     cid?: string;
     onSubmit: () => void;

@@ -1,6 +1,5 @@
 import './Cutcha.css';
 
-import React from 'react';
 import { DraggableData } from 'react-draggable';
 
 import PuzzleMain from '../PuzzleMain/PuzzleMain';

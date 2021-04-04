@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DraggableData } from 'react-draggable';
 
 import CutchaHeader from './components/CutchaHeader/CutchaHeader';

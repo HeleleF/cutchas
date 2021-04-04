@@ -1,6 +1,5 @@
 import './PuzzleMain.css';
 
-import React from 'react';
 import { CUTCHA_API_URL } from '../../constants/cutcha';
 import ScalableImage from '../ScalableImage/ScalableImage';
 

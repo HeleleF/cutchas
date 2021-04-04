@@ -1,6 +1,5 @@
 import './CutchaStats.css';
 
-import React from 'react';
 import { PuzzleTypeCount } from '../../types/puzzle';
 
 interface CutchaStatsProps {
