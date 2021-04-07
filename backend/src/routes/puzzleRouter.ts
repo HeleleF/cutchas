@@ -1,7 +1,6 @@
 import { Router } from 'express';
-
-import * as puzzleController from '../controllers/puzzleController.js';
 import { check } from 'express-validator';
+import * as puzzleController from '../controllers/puzzleController.js';
 
 const isValidToken = check('token')
     .isLength({ min: 32, max: 32 })

@@ -1,0 +1,15 @@
+.CutchaLoading {
+    height: 100%;
+    width: 100%;
+    border: 1px dashed hotpink;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.CutchaLoadingMessage {
+    font-size: 3em;
+    max-width: 50vw;
+    color: #e066ff;
+}

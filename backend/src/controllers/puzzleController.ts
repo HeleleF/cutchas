@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-
-import axiosInstance from '../util/axios.js';
-import { SECRETS } from '../util/secrets.js';
-
 import { Puzzle } from '../models/Puzzle.js';
-
 import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
+import axiosInstance, { loadParts } from '../util/axios.js';
+import { SECRETS } from '../util/secrets.js';
 
 const payload = {
     f: '',
@@ -17,26 +14,46 @@ const payload = {
 };
 
 export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
-    let data;
-
     // repeat until we get a puzzle thats either UNSOLVED or NEW
+    // TODO(helene): when the number of solved puzzles increases, this method will
+    // take longer and longer until it becomes an infinite loop. How do we fix this?
+
+    let tries = 10;
+
     do {
-        ({ data } = await axiosInstance.post<CutchaPuzzle>(
-            `${SECRETS.CUTCHA_API_URL}.json`,
+        const { data } = await axiosInstance.post<CutchaPuzzle>(
+            `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}.json`,
             {
-                api_key: 'SAs61IAI',
+                api_key: SECRETS.CUTCHA_API_KEY,
             },
-        ));
+        );
 
         if (!data.succ) {
             res.status(500).json(data);
             return;
         }
-    } while (
-        await Puzzle.findOne({ question: data.captcha_question, typ: 'solved' })
-    );
 
-    res.json({ id: data.captcha_question, token: data.captcha_token });
+        console.log(`Recieved new puzzle: ${data.captcha_question}`);
+        const maybeSolved = await Puzzle.findOne({
+            question: data.captcha_question,
+            typ: 'solved',
+        });
+        if (maybeSolved) continue;
+
+        const images = await loadParts(data.captcha_question);
+        if (!images) continue; // TODO(helene): mark as broken while we're here
+
+        res.status(200).json({
+            id: data.captcha_question,
+            token: data.captcha_token,
+            images,
+        });
+        return;
+    } while (tries--);
+
+    res.status(500).json({
+        error: 'Could not fetch a puzzle thats either unsolved or not broken!',
+    });
 };
 
 export const submitPuzzle = async (
@@ -52,7 +69,7 @@ export const submitPuzzle = async (
     const { id, token, x0, x1, x2, y0, y1, y2 } = req.body;
 
     const { data } = await axiosInstance.post<CutchaPuzzleSubmitResult>(
-        `${SECRETS.CUTCHA_API_URL}/check`,
+        `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/check`,
         {
             ...payload,
             captcha_token: token,
@@ -94,7 +111,6 @@ export const submitPuzzle = async (
     );
 
     res.status(200).json({
-        solved: data.correct,
         upserted: !result.lastErrorObject.updatedExisting,
         puzzle: result.value,
     });

@@ -1,8 +1,79 @@
 .Cutcha {
-    width: fit-content;
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 90vh;
+    width: 95vw;
 }
 
-.PuzzlePieceArea {
+.CutchaSubmitWrapper {
     display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: fit-content;
+    width: fit-content;
+
+    cursor: pointer;
+}
+
+.CutchaSubmit {
+    fill: #69ff00;
+    height: 4em;
+    width: 4em;
+}
+
+.PuzzlePieceDragArea {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.PuzzlePieceStartArea {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    position: relative;
+    height: 100%;
+
+    border: 1px dashed yellow;
+    border-right: none;
+    border-radius: 2em 0 0 2em;
+}
+
+.PuzzleMain {
+    border-radius: 0 2em 2em 0;
+    height: 100%;
+}
+
+@media only screen and (min-width: 320px) {
+}
+
+@media only screen and (min-width: 375px) {
+}
+
+@media only screen and (min-width: 425px) {
+}
+
+@media only screen and (min-width: 768px) {
+}
+
+@media only screen and (min-width: 1024px) {
+}
+
+.TurnDevice {
+    display: none;
+}
+
+@media only screen and (orientation: portrait) {
+    .Cutcha,
+    .CutchaStats {
+        display: none;
+    }
+    .TurnDevice {
+        display: block;
+    }
 }
