@@ -1,24 +1,40 @@
-import { DraggableData } from 'react-draggable';
-import { CUTCHA_API_URL } from '../../constants/cutcha';
-import ScalableImage from '../ScalableImage/ScalableImage';
+import { ChangeEvent, ImgHTMLAttributes, useRef, useState } from 'react';
+import Draggable, { DraggableData } from 'react-draggable';
 import './PuzzlePiece.css';
 
 interface PuzzlePieceProps {
-    onDragEnd: (num: number, dragData: DraggableData) => void;
-    scaleFactor: number;
-    id: string;
-    partNumber: 0 | 1 | 2;
+    onDragStop: (dragData: DraggableData) => void;
+    scale: number;
 }
 
-function PuzzlePiece({ onDragEnd, id, scaleFactor, partNumber }: PuzzlePieceProps): JSX.Element {
+function PuzzlePiece({
+    onDragStop,
+    scale,
+    ...imgProps
+}: PuzzlePieceProps & ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
+    const imgRef = useRef(null);
+
+    const [height, setHeight] = useState(0);
+
     return (
-        <ScalableImage
-            scaleFactor={scaleFactor}
-            onDragEnd={onDragEnd.bind(null, partNumber)}
-            className="PuzzlePiece"
-            title={`Puzzle Piece ${partNumber + 1}`}
-            src={`${CUTCHA_API_URL}/${id}/part${partNumber}.png`}
-        />
+        <Draggable
+            onStop={(_, data) => onDragStop(data)}
+            nodeRef={imgRef}
+            bounds=".PuzzlePieceDragArea"
+        >
+            {/** draggable=false to disable native browser-dragging behavior */}
+            <img
+                {...imgProps}
+                draggable={false}
+                ref={imgRef}
+                className="PuzzlePiece"
+                height={Math.ceil(height * scale)}
+                onLoad={({ target }: ChangeEvent<HTMLImageElement>) => {
+                    const { naturalHeight } = target;
+                    setHeight(naturalHeight);
+                }}
+            />
+        </Draggable>
     );
 }
 
