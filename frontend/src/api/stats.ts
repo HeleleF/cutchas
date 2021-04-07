@@ -1,10 +1,13 @@
-export const getPuzzleStats = async (): Promise<unknown> => {
+import { PuzzleTypeCount } from '../types/puzzle';
+
+export const getPuzzleStats = async (): Promise<PuzzleTypeCount[]> => {
     try {
         const resp = await fetch('/api/stats');
         const data = await resp.json();
 
         return data.result;
     } catch (err) {
-        return { error: err.message };
+        console.log(err);
+        return [];
     }
 };

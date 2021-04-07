@@ -1,17 +1,10 @@
-import { PuzzleDataApiResponse, PuzzleSubmitData } from '../types/puzzle';
+import { PuzzleDataAll, PuzzleSubmitData } from '../types/puzzle';
 
-export const getRandomPuzzle = async (): Promise<PuzzleDataApiResponse> => {
-    try {
-        const resp = await fetch('/api/puzzle/new');
-        const pd = await resp.json();
+export const getRandomPuzzle = async (): Promise<PuzzleDataAll> => {
+    const resp = await fetch('/api/puzzle/new');
+    const pd = await resp.json();
 
-        return {
-            error: false,
-            data: pd,
-        };
-    } catch (err) {
-        return { error: true, data: err.message };
-    }
+    return pd;
 };
 
 export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown> => {
