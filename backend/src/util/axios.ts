@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CutchaPart } from '../types/cutcha.js';
 import { SECRETS } from './secrets.js';
 
 const axiosInstance = axios.create({
@@ -12,5 +13,37 @@ const axiosInstance = axios.create({
     },
     timeout: 10000,
 });
+
+export const loadPuzzleImage = async (
+    id: string,
+    partName: CutchaPart,
+): Promise<string> => {
+    const { data } = await axiosInstance.get<ArrayBuffer>(
+        `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/${id}/${partName}.png`,
+        {
+            responseType: 'arraybuffer',
+        },
+    );
+    if (data.byteLength < 1000) {
+        console.log(
+            `Recieved only ${data.byteLength} bytes from\n${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/${id}/${partName}.png`,
+        );
+        throw new TypeError('Empty part');
+    }
+    return `data:image/png;base64,${Buffer.from(data).toString('base64')}`;
+};
+
+export const loadParts = async (id: string): Promise<string[] | null> => {
+    try {
+        return await Promise.all([
+            loadPuzzleImage(id, 'cut'),
+            loadPuzzleImage(id, 'part0'),
+            loadPuzzleImage(id, 'part1'),
+            loadPuzzleImage(id, 'part2'),
+        ]);
+    } catch (_) {
+        return null;
+    }
+};
 
 export default axiosInstance;
