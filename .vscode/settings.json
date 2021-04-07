@@ -8,5 +8,10 @@
   },
   "eslint.alwaysShowStatus": true,
   "eslint.workingDirectories": ["backend", "frontend"],
-  "eslint.validate": ["typescript", "typescriptreact"]
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ]
 }
