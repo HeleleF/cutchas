@@ -12,16 +12,9 @@ export interface PuzzleData {
     token: string;
 }
 
-export interface PuzzleDataApiResponseSuccess {
-    error: false;
-    data: PuzzleData;
-}
-export interface PuzzleDataApiResponseError {
-    error: true;
-    data: string;
-}
-
-export type PuzzleDataApiResponse = PuzzleDataApiResponseSuccess | PuzzleDataApiResponseError;
+export type PuzzleDataAll = PuzzleData & {
+    images: [string, string, string, string];
+};
 
 export interface PuzzleTypeCount {
     _id: string;
@@ -29,15 +22,3 @@ export interface PuzzleTypeCount {
 }
 
 export type PuzzleSubmitData = PuzzleData & PuzzleSolution;
-
-export interface PuzzleDataLoading {
-    puzzle: null;
-    loading: true;
-}
-
-export interface PuzzleDataDone {
-    puzzle: PuzzleData;
-    loading: false;
-}
-
-export type PuzzleDataRequest = PuzzleDataLoading | PuzzleDataDone;
