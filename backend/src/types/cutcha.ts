@@ -18,3 +18,5 @@ export type CutchaPuzzleSubmitResult =
     | CutchaPuzzleSuccess
     | CutchaPuzzleNoSuccess
     | 'captcha_token is missing';
+
+export type CutchaPart = 'cut' | 'part0' | 'part1' | 'part2';
