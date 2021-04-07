@@ -30,7 +30,7 @@ body {
     scroll-behavior: smooth;
     text-rendering: optimizeSpeed;
     line-height: 1.5;
-    background-color: #242424;
+    background: linear-gradient(90deg, rgba(51, 51, 51, 1) 0%, rgba(36, 36, 36, 1) 100%);
 }
 
 /* Remove list styles on ul, ol elements with a class attribute */
@@ -46,7 +46,6 @@ a:not([class]) {
 
 /* Make images easier to work with */
 img {
-    max-width: 100%;
     display: block;
 }
 
