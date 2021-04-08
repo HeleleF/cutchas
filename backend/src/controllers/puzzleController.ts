@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { Puzzle } from '../models/Puzzle.js';
-import { CutchaPuzzle, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
+import { CutchaApiResult, CutchaPuzzleSubmitResult } from '../types/cutcha.js';
 import axiosInstance, { loadParts } from '../util/axios.js';
 import { SECRETS } from '../util/secrets.js';
 
@@ -21,12 +21,19 @@ export const getPuzzle = async (_: Request, res: Response): Promise<void> => {
     let tries = 10;
 
     do {
-        const { data } = await axiosInstance.post<CutchaPuzzle>(
+        const { data } = await axiosInstance.post<CutchaApiResult>(
             `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}.json`,
             {
                 api_key: SECRETS.CUTCHA_API_KEY,
             },
         );
+
+        if ('string' === typeof data) {
+            res.status(500).json({
+                error: `Expected json, but recieved ${data}`,
+            });
+            return;
+        }
 
         if (!data.succ) {
             res.status(500).json(data);
