@@ -1,0 +1,35 @@
+.TurnDevice {
+    height: 85vh;
+    width: 80vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(90deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+.Phone {
+    height: 100px;
+    width: 50px;
+    border: 3px solid white;
+    border-radius: 10px;
+    animation: rotate 1.5s ease-in-out infinite alternate;
+}
+
+.TurnMessage {
+    color: white;
+    font-size: 1em;
+    margin-top: 15px;
+}
