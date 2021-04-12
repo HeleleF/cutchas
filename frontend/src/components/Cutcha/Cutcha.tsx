@@ -46,7 +46,7 @@ function Cutcha(): JSX.Element {
         <div className="Cutcha">
             {isError && <div>Something went wrong ...</div>}
             {isLoading ? (
-                <CutchaLoading />
+                <CutchaLoading scale={scale} />
             ) : (
                 <>
                     <div className="PuzzlePieceDragArea">
