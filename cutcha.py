@@ -114,13 +114,15 @@ def load_questions(num_tasks: int = 100, num_reqs: int = 100) -> None:
     log.info(
         f'Starting {num_tasks} tasks with {num_reqs} requests each => Performing {num_tasks * num_reqs} requests in total!')
 
+    CUTCHA_URL = f'{os.environ["CUTCHA_API_URL"]}/{os.environ["CUTCHA_API_KEY"]}'
+
     async def produce(sess: aiohttp.ClientSession, queue: asyncio.Queue, cnt: int):
 
         attempts = 0
 
         for _ in range(cnt):
             try:
-                async with sess.post('https://cutcaptcha.com/captcha/SAs61IAI.json', data=payload) as response:
+                async with sess.post(f'{CUTCHA_URL}.json', data=payload) as response:
 
                     try:
                         content = await response.json()
