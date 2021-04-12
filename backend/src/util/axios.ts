@@ -18,16 +18,13 @@ export const loadPuzzleImage = async (
     id: string,
     partName: CutchaPart,
 ): Promise<string> => {
-    const { data } = await axiosInstance.get<ArrayBuffer>(
-        `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/${id}/${partName}.png`,
-        {
-            responseType: 'arraybuffer',
-        },
-    );
+    const imageUrl = `${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/${id}/${partName}.png`;
+
+    const { data } = await axiosInstance.get<ArrayBuffer>(imageUrl, {
+        responseType: 'arraybuffer',
+    });
     if (data.byteLength < 1000) {
-        console.log(
-            `Recieved only ${data.byteLength} bytes from\n${SECRETS.CUTCHA_API_URL}/${SECRETS.CUTCHA_API_KEY}/${id}/${partName}.png`,
-        );
+        console.log(`Recieved only ${data.byteLength} bytes from\n${imageUrl}`);
         throw new TypeError('Empty part');
     }
     return `data:image/png;base64,${Buffer.from(data).toString('base64')}`;

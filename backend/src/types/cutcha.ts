@@ -4,6 +4,8 @@ export interface CutchaPuzzle {
     captcha_token: string;
 }
 
+export type CutchaApiResult = CutchaPuzzle | string;
+
 export interface CutchaPuzzleSuccess {
     succ: true;
     correct: boolean;
