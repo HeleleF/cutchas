@@ -29,8 +29,8 @@ const puzzleSchema = new mongoose.Schema<PuzzleDocument>(
                         value,
                     );
                 },
-                message(props: any) {
-                    return `${props.value} is not a valid question uuid!`;
+                message({ value }: { value: unknown }) {
+                    return `${value} is not a valid question uuid!`;
                 },
             },
         },
@@ -44,33 +44,39 @@ const puzzleSchema = new mongoose.Schema<PuzzleDocument>(
             type: Number,
             required: false,
             min: 1,
+            max: 488,
         },
         y0: {
             type: Number,
             required: false,
             min: 1,
+            max: 488,
         },
 
         x1: {
             type: Number,
             required: false,
             min: 1,
+            max: 488,
         },
         y1: {
             type: Number,
             required: false,
             min: 1,
+            max: 488,
         },
 
         x2: {
             type: Number,
             required: false,
             min: 1,
+            max: 488,
         },
         y2: {
             type: Number,
             required: false,
             min: 1,
+            max: 488,
         },
     },
     { timestamps: true },

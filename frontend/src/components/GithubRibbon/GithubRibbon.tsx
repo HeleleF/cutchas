@@ -1,7 +1,5 @@
 import './GithubRibbon.css';
 
-import React from 'react';
-
 function GithubRibbon(): JSX.Element {
     return (
         <a

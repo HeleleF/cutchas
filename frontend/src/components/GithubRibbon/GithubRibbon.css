@@ -32,6 +32,7 @@ SOFTWARE. */
     font-size: 13px;
     text-decoration: none;
     text-indent: -999999px;
+    display: none;
 }
 
 .GithubRibbon:before,
@@ -69,4 +70,10 @@ SOFTWARE. */
     border-width: 0.08em 0;
     border-style: dotted;
     border-color: rgba(255, 255, 255, 0.7);
+}
+
+@media only screen and (orientation: landscape) and (min-width: 1024px) {
+    .GithubRibbon {
+        display: block;
+    }
 }

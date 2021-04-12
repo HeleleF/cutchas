@@ -2,4 +2,6 @@
     cursor: move;
     border: 1px dotted black;
     user-select: none;
+
+    box-shadow: inset -8px -3px 20px 0px #ffffff2e;
 }

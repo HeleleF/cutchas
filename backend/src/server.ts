@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 import app from './app.js';
 import { SECRETS } from './util/secrets.js';
 

@@ -1,6 +1,15 @@
 .CutchaStats {
     position: absolute;
-    right: 2em;
-    bottom: 2em;
+    right: 0.5em;
+    bottom: 0.2em;
     color: #b5b5b5;
+    font-size: 0.5em;
+}
+
+@media only screen and (min-height: 500px) {
+    .CutchaStats {
+        right: 2em;
+        bottom: 2em;
+        font-size: 1em;
+    }
 }

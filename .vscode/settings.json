@@ -1,8 +1,15 @@
 {
-  "python.linting.pylintEnabled": false,
-  "python.linting.pycodestyleEnabled": false,
   "python.linting.enabled": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
+  },
+  "eslint.alwaysShowStatus": true,
+  "eslint.workingDirectories": ["backend", "frontend"],
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ]
 }
