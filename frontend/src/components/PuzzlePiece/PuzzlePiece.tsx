@@ -12,7 +12,7 @@ function PuzzlePiece({
     scale,
     ...imgProps
 }: PuzzlePieceProps & ImgHTMLAttributes<HTMLImageElement>): JSX.Element {
-    const imgRef = useRef(null);
+    const imgRef = useRef<HTMLImageElement>(null);
 
     const [height, setHeight] = useState(0);
 
