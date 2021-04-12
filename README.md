@@ -1,5 +1,7 @@
 # Cutchas
 
+![Heroku](https://heroku-badge.herokuapp.com/?app=cutcha)
+
 Learning things about Javascript and Python by deobfuscating captcha sites and figuring out how and why they work.
 
 ## Technologies
@@ -63,7 +65,9 @@ Learning things about Javascript and Python by deobfuscating captcha sites and f
 
 ### Current stats
 
-_UPDATE_: This is outdated, we're now using MongoDB.
+To see the current stats, visit [cutcha@heroku](https://cutcha.herokuapp.com). Stats are displayed in the right corner, updated every minute.
+
+_Old way below_:
 
 ```sql
 sqlite> SELECT typ, COUNT(typ) FROM puzzle GROUP BY typ;
@@ -82,6 +86,8 @@ unknown|28908
 6. Provide browser extension that automatically checks for cutcaptchas and tries to solve them by looking them up in the database 🛠
 
 ### Manual solving
+
+_Old way from before, solving is now done on heroku_
 
 1. Start the webserver by running `python3 server/app.py`
 
