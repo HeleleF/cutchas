@@ -1,13 +1,11 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import GithubRibbon from './components/GithubRibbon/GithubRibbon';
 import './index.css';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <GithubRibbon />
+    <StrictMode>
         <App />
-    </React.StrictMode>,
+    </StrictMode>,
     document.getElementById('root'),
 );
