@@ -22,3 +22,5 @@ export interface PuzzleTypeCount {
 }
 
 export type PuzzleSubmitData = PuzzleData & PuzzleSolution;
+
+export type PuzzleSubmitReturn = Partial<{ upserted: boolean; puzzle: unknown; error: string }>;

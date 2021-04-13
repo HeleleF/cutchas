@@ -1,13 +1,18 @@
-import { PuzzleDataAll, PuzzleSubmitData } from '../types/puzzle';
+import { PuzzleDataAll, PuzzleSubmitData, PuzzleSubmitReturn } from '../types/puzzle';
 
 export const getRandomPuzzle = async (): Promise<PuzzleDataAll> => {
     const resp = await fetch('/api/puzzle/new');
+
+    if (!resp.ok) {
+        throw new Error(`Recieved status code: ${resp.status}`);
+    }
+
     const pd = await resp.json();
 
     return pd;
 };
 
-export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown> => {
+export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<PuzzleSubmitReturn> => {
     try {
         const resp = await fetch('/api/puzzle/submit', {
             method: 'POST',
@@ -18,7 +23,7 @@ export const submitPuzzle = async (solution: PuzzleSubmitData): Promise<unknown>
         });
         return await resp.json();
     } catch (err) {
-        return { error: true, data: err.message };
+        return { error: err.message };
     }
 };
 
