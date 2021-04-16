@@ -10,4 +10,7 @@ export const SECRETS = {
     CUTCHA_API_URL:
         process.env.CUTCHA_API_URL ??
         'No cutcha api url set! Update heroku config vars!',
+    TOKEN_ENDPOINT_API_KEY:
+        process.env.TOKEN_ENDPOINT_API_KEY ??
+        'No token api key set! Update heroku config vars!',
 };
