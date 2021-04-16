@@ -33,6 +33,7 @@ log.addHandler(fh)
 log.addHandler(ch)
 
 
+log.info('Connecting to database...')
 client = MongoClient(os.environ['MONGO_DB_URL'])
 db = client.cutchaPuzzles
 
@@ -293,5 +294,5 @@ def load_images(questions: list[str]) -> None:
     log.info(f'Done after {elapsed:.2f} seconds')
 
 
-load_questions(50, 150)
+load_questions(50, 100)
 client.close()

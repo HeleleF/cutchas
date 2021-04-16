@@ -1,3 +1,5 @@
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './App.css';
 import Cutcha from './components/Cutcha/Cutcha';
 import CutchaStats from './components/CutchaStats/CutchaStats';
@@ -15,6 +17,7 @@ function App(): JSX.Element {
                 <>
                     <Cutcha />
                     <CutchaStats />
+                    <ToastContainer />
                 </>
             )}
         </div>

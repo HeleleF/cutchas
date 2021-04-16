@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { getRandomPuzzle, submitPuzzle } from '../api/puzzle';
 import { PuzzleDataAll, PuzzleSubmitData } from '../types/puzzle';
 
@@ -24,7 +25,11 @@ export default function usePuzzleApi(): PuzzleApiHookReturn {
             setIsError(false);
 
             if (solution) {
-                await submitPuzzle(solution);
+                const { error } = await submitPuzzle(solution);
+                toast(error ? '😱 Wrong' : '🎉 Correct', {
+                    autoClose: 2000,
+                    type: error ? 'error' : 'success',
+                });
             }
 
             try {
